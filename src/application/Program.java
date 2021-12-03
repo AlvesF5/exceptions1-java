@@ -39,16 +39,16 @@ public class Program {
             System.out.println("CheckOut in date (dd/MM/yyyy): ");
             checkOut = sdf.parse(sc.next());
 
-            Date now = new Date();
 
-            if (checkIn.before(now) || checkOut.before(now)){
-                System.out.println("Datas inválidas! As datas de check-in e check-out tem que ser maiores que a data atual");
-            }else  if(!checkOut.after(checkIn)){
-                System.out.println("Data inválida! Check-in maior que check-ou.");
+            String error = reservation.updateDates(checkIn,checkOut);
+
+            if (error!=null){
+                System.out.println("Erro: "+error);
             }else {
-                reservation.updateDates(checkIn,checkOut);
                 System.out.println(reservation);
             }
+
+
 
 
         }
