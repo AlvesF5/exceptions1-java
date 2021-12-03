@@ -1,5 +1,7 @@
 package domain.entities;
 
+import domain.exceptions.DateReservationException;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -15,7 +17,10 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Integer roomNumber, Date checkIn, Date checkOut) {
+    public Reservation(Integer roomNumber, Date checkIn, Date checkOut) throws DateReservationException {
+        if(!checkOut.after(checkIn)){
+            throw new DateReservationException("Data inválida! Check-in maior que check-ou.");
+        }
         this.roomNumber = roomNumber;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
@@ -38,9 +43,19 @@ public class Reservation {
         return TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
     }
 
-    public void updateDates(Date checkIn, Date checkOut){
+    public void updateDates(Date checkIn, Date checkOut) throws DateReservationException{
+
+        Date now = new Date();
+
+        if (checkIn.before(now) || checkOut.before(now)) {
+            throw new DateReservationException("Datas inválidas! As datas de check-in e check-out tem que ser maiores que a data atual");
+        }
+        if(!checkOut.after(checkIn)){
+            throw new DateReservationException("Data inválida! Check-in maior que check-ou.");
+        }
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+
     }
 
     @Override
